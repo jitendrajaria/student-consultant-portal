@@ -1,0 +1,28 @@
+{
+	"name": "student_consult_portal",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node api"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"elasticsearch": "^16.7.2",
+		"express": "^4.17.1",
+		"faker": "^5.5.3",
+		"joi": "^17.4.2",
+		"mongodb": "^3.6.10",
+		"mongoose": "^5.13.5",
+		"mongoose-fuzzy-searching": "^2.0.2"
+	},
+	"devDependencies": {
+		"@types/mongoose": "^5.11.97",
+		"eslint": "^7.32.0",
+		"prettier": "^2.3.2"
+	}
+}
