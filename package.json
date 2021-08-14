@@ -3,8 +3,17 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "server.js",
+	"jest": {
+		"testEnvironment": "node",
+		"coveragePathIgnorePatterns": [
+			"/node_modules/"
+		],
+		"setupFilesAfterEnv": [
+			"./tests/setup.js"
+		]
+	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "jest --verbose --runInBand",
 		"start": "node api"
 	},
 	"author": "",
@@ -23,6 +32,8 @@
 	"devDependencies": {
 		"@types/mongoose": "^5.11.97",
 		"eslint": "^7.32.0",
-		"prettier": "^2.3.2"
+		"jest": "^27.0.6",
+		"prettier": "^2.3.2",
+		"supertest": "^6.1.5"
 	}
 }

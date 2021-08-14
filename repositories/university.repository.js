@@ -2,11 +2,15 @@ const CourseModel = require('./models/course.model');
 const UniversityModel = require('./models/university.model');
 
 module.exports = (() => {
-	function findUniversityByQuery(gpa, greScore, country, courseName) {
-		let query = { minGpa: { $gte: 2 } };
-		return CourseModel.fuzzySearch('learn')
-			.populate({ path: 'universityId', match: query, select: 'name' })
-			.find({ universityId: { $ne: null } });
+	async function findUniversityByQuery({ gpa, greScore, country, courseName }) {
+		let query = {
+			minGpa: { $gte: gpa },
+			minGreScore: { $gte: greScore },
+			country: { $regex: country, $options: 'i' },
+		};
+
+		const res = await CourseModel.fuzzySearch({ query: courseName }).populate({ path: 'university', match: query, select: 'name minGpa minGreScore country' });
+		return res.filter((course) => course.university);
 	}
 
 	function saveUniversity(universityDetails) {
@@ -20,10 +24,17 @@ module.exports = (() => {
 	function saveCourse(courseDetails) {
 		return CourseModel.create(courseDetails);
 	}
+
+	async function removeFixtureData(id) {
+		await UniversityModel.deleteOne({ _id: id });
+		await CourseModel.deleteMany({ university: id });
+	}
+
 	return {
 		findUniversityByQuery,
 		saveUniversity,
 		findMinimumUniversityInDb,
 		saveCourse,
+		removeFixtureData,
 	};
 })();

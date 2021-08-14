@@ -8,8 +8,12 @@ const { findUniversityByQuery } = require('../../repositories/university.reposit
  * @returns
  */
 module.exports = async function queryHandler(req, res, next) {
-	let params = req.query;
-	let response = await findUniversityByQuery(2, 40, 'Saint Lucia', 'Science');
-	console.log(response);
-	res.json({ res: response });
+	try {
+		let inputData = res.locals.inputData;
+		res.locals.response = await findUniversityByQuery({ ...inputData });
+		next();
+	} catch (err) {
+		console.error(err);
+		next(err);
+	}
 };

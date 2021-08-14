@@ -15,14 +15,18 @@ module.exports = (function dbManager() {
 			console.log('Error occured while setuping mongo', err);
 		}
 	}
+	async function closeConnection() {
+		await mongoose.connection.close();
+	}
 
 	async function insertInitalData() {
+		const countries = ['Germany', 'USA', 'Japan'];
 		if ((await findMinimumUniversityInDb()) < 3) {
 			for (let i = 0; i < 3; i++) {
 				const universityData = {
 					name: faker.company.companyName(),
 					description: faker.lorem.paragraph(5),
-					country: faker.address.country(),
+					country: countries[i],
 					minGpa: Math.floor(Math.random() * 11),
 					minGreScore: Math.floor(Math.random() * 361),
 				};
@@ -31,17 +35,17 @@ module.exports = (function dbManager() {
 					{
 						teacherName: faker.name.firstName(),
 						name: 'Data Science',
-						universityId: uniData._id,
+						university: uniData._id,
 					},
 					{
 						teacherName: faker.name.firstName(),
-						name: 'Computer  Science',
-						universityId: uniData._id,
+						name: 'Computer Science',
+						university: uniData._id,
 					},
 					{
 						teacherName: faker.name.firstName(),
 						name: 'Machine learning ',
-						universityId: uniData._id,
+						university: uniData._id,
 					},
 				];
 				await saveCourse(courseData);
@@ -49,5 +53,5 @@ module.exports = (function dbManager() {
 		}
 	}
 
-	return { setup };
+	return { setup, closeConnection };
 })();

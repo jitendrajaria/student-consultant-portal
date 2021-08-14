@@ -2,13 +2,10 @@ const { Request, Response, NextFunction } = require('express');
 const Joi = require('joi');
 
 const adminSchema = Joi.object({
-	username: Joi.string().required(),
-	password: Joi.string().required(),
-});
-
-const getUserInputSchema = Joi.object({
-	limit: Joi.number().required().min(0),
-	skip: Joi.number().required().min(0),
+	gpa: Joi.number().min(0).max(10).required(),
+	greScore: Joi.number().min(0).max(360).required(),
+	country: Joi.string().max(100).required().allow(''),
+	courseName: Joi.string().max(100).allow('', null),
 });
 
 /**
@@ -17,8 +14,8 @@ const getUserInputSchema = Joi.object({
  * @param {Response} res
  * @param {NextFunction} next
  */
-const inputAdminValidate = (req, res, next) => {
-	const { body } = req;
+const inputQueryValidate = (req, res, next) => {
+	const body = req.query;
 
 	const validateRes = adminSchema.validate(body);
 	if (validateRes.error) {
@@ -28,21 +25,4 @@ const inputAdminValidate = (req, res, next) => {
 	return next();
 };
 
-/**
- *
- * @param {Request} req
- * @param {Response} res
- * @param {NextFunction} next
- */
-const inputGetUserValidate = (req, res, next) => {
-	const inputSchema = req.query;
-
-	const validateRes = getUserInputSchema.validate(inputSchema);
-	if (validateRes.error) {
-		return next(validateRes.error);
-	}
-	res.locals.inputData = inputSchema;
-	return next();
-};
-
-module.exports = { inputAdminValidate, inputGetUserValidate };
+module.exports = { inputQueryValidate };
